@@ -1,0 +1,1 @@
+1 - Append particles in cells they overlap, do calculations in cells only
