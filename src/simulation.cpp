@@ -11,6 +11,9 @@ Simulation::Simulation(int width, int height)
     this->width = width;
     this->height = height;
     gridCount = 30;
+    finalParticleCount = 500;
+    frameCount = 0;
+    framePerSpawn = 5;
     initialize();
 }
 
@@ -20,7 +23,9 @@ Simulation::~Simulation()
 
 void Simulation::initialize()
 {
+    grid = vector<vector<vector<Particle*>>>(gridCount + 2, vector<vector<Particle*>>(gridCount + 2));
     srand(1);
+    /*
     for (size_t i = 0; i < 1000; i++)
     {
         // int radius = rand() % 20 + 10;
@@ -35,6 +40,7 @@ void Simulation::initialize()
         particles.push_back(particle);
         grid = vector<vector<vector<Particle*>>>(gridCount + 2, vector<vector<Particle*>>(gridCount + 2));
     }
+    */
 }
 
 void Simulation::draw()
@@ -47,6 +53,27 @@ void Simulation::draw()
 
 void Simulation::update()
 {
+    frameCount ++;
+    // add a new particle
+    if (frameCount % framePerSpawn == 0) {
+        for (int i: {-1, 1}) {
+            for (int j: {-1, 1}) {
+                int radius = 5;
+                int mass = radius;
+                double x = (i == -1) ? width - radius * 2 : radius * 2;
+                double y = (j == -1) ? height - radius * 2 : radius * 2;
+                Vector2D position(x, y);
+                double xVelMultiplier = i;
+                double yVelMultiplier = j;
+                Vector2D velocity((1.5 + randDouble() * 0.5) * xVelMultiplier, (1.5 + randDouble() * 0.5) * yVelMultiplier);
+                Color color = Color{255, (unsigned char)(position.x / width * 255), 255, 255};
+                Particle*  particle = new Particle(position, velocity, radius, mass, color, particles.size());
+                particles.push_back(particle);
+            }
+        }
+        
+    }
+
     // move the particles
     for (size_t i = 0; i < particles.size(); i++)
     {

@@ -14,6 +14,9 @@ private:
     int gridCount;
     vector<Particle*> particles;
     vector<vector<vector<Particle*>>> grid;
+    int finalParticleCount;
+    long long frameCount;
+    int framePerSpawn;
 
     void initialize();
 public:
